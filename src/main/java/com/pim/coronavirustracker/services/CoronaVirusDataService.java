@@ -2,6 +2,7 @@ package com.pim.coronavirustracker.services;
 
 import com.pim.coronavirustracker.models.LocationStats;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,6 +18,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Service
 public class CoronaVirusDataService {
 
