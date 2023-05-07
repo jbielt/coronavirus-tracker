@@ -8,12 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Controller
 public class HomeController {
 
-    CoronaVirusDataService coronaVirusDataService;
-
+    private final CoronaVirusDataService coronaVirusDataService;
+    @Autowired
+    public HomeController(CoronaVirusDataService coronaVirusDataService) {
+        this.coronaVirusDataService = coronaVirusDataService;
+    }
 
     @GetMapping("/")
     public String home(Model model){
