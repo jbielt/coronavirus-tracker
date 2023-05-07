@@ -1,9 +1,13 @@
 package com.pim.coronavirustracker.services;
 
 import jakarta.annotation.PostConstruct;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -26,8 +30,21 @@ public class CoronaVirusDataService {
         //get response
         HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        //print temporally data in response
-        System.out.println(httpResponse.body());
+        //create a bodyReader of the response
+        StringReader csvBodyReader = new StringReader(httpResponse.body());
+
+        //parsing CSV /auto-detection headers
+        Iterable<CSVRecord> records = CSVFormat.Builder.create(CSVFormat.DEFAULT)
+                .setHeader()
+                .setSkipHeaderRecord(true)
+                .build()
+                .parse(csvBodyReader);
+
+        for (CSVRecord record : records) {
+            String id = record.get("ID");
+            String customerNo = record.get("CustomerNo");
+            String name = record.get("Name");
+        }
     }
 
 }
