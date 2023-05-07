@@ -1,5 +1,6 @@
 package com.pim.coronavirustracker.services;
 
+import com.pim.coronavirustracker.models.LocationStats;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -13,16 +14,26 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CoronaVirusDataService {
 
 
+    //URL with the data
     private static String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
+
+    private List<LocationStats> allStats = new ArrayList<>();
+
 
     @PostConstruct//annotation method that executes on app start
     @Scheduled(cron = "* * 1 * * *") //specified execute the first hour of every day (once every day)
     public void fetchVirusData() throws IOException, InterruptedException {
+
+        //creating stats lists to populate allStats list
+        List<LocationStats> newStats = new ArrayList<>();
+
         //make the request
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -42,11 +53,17 @@ public class CoronaVirusDataService {
                 .build()
                 .parse(csvBodyReader);
 
-        //looping the records after the parse
+        //looping the records after the parse and populating the model
         for (CSVRecord record : records) {
-            String state = record.get("Province/State");
-            System.out.println(state);
+            LocationStats locationStats = new LocationStats();
+            locationStats.setState(record.get("Province/State"));
+            locationStats.setCountry(record.get("Country/Region"));
+            locationStats.setLatestTotalCases(Integer.parseInt(record.get(record.size() -1)));
+            System.out.println(locationStats);
+            newStats.add(locationStats);
         }
+        //reference the empty list to the populated list
+        this.allStats = newStats;
     }
 
 }
