@@ -10,20 +10,21 @@
 
 <body>
 
-    <h1>Coronavirus Tracker Application</h1>
-    <p>This application lists the current number of cases reported across the globe</p>
-
-    <!--simulate jumbotron v4 to bootstrap v5-->
-    <div class="container-fluid bg-light text-dark p-5 mb-3">
-        <div class="container bg-light p-5">
-            <h1 class="display-4 fw-bold" th:text="${totalReportedCases}"></h1>
-            <hr>
-            <p class="fw-bold">Total cases reported as of today</p>
-        </div>
-    </div>
-
     <div class="container">
-        <table>
+
+        <h1>Coronavirus Tracker Application</h1>
+        <p>This application lists the current number of cases reported across the globe</p>
+
+        <!--simulate jumbotron v4 to bootstrap v5-->
+        <div class="container-fluid bg-light text-dark p-5 mb-3">
+            <div class="container bg-light p-5">
+                <h1 class="display-4 fw-bold" th:text="${totalReportedCases}"></h1>
+                <hr>
+                <p class="lead fw-bold">Total cases reported as of today</p>
+            </div>
+        </div>
+
+        <table class="table">
             <tr>
                 <th>State</th>
                 <th>Country</th>
@@ -35,12 +36,10 @@
                 <td th:text="${locationStat.country}"></td>
                 <td th:text="${locationStat.latestTotalCases}">0</td>
                 <td th:text="${locationStat.diffFromPrevDay}">0</td>
-
             </tr>
         </table>
+
     </div>
-
-
 
 </body>
 
